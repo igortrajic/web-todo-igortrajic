@@ -5,26 +5,26 @@ const addButton = document.getElementById('add-todo-button')
 const todoElements = document.getElementById('todo-elements')
 const errorMessage = document.getElementById('error-message')
 
-const STORAGE_KEY = 'todo-list';
+const STORAGE_KEY = 'todo-list'
 
 function saveTodos(todos: string[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
 }
 
 function getTodos(): string[] {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  return saved ? JSON.parse(saved) : [];
+  const saved = localStorage.getItem(STORAGE_KEY)
+  return saved ? JSON.parse(saved) : []
 }
 
 function renderTodos() {
-  if (!todoElements) return;
-  todoElements.innerHTML = '';
-  const todos = getTodos();
-  todos.forEach(task => {
-    const li = document.createElement('li');
-    li.textContent = task;
-    todoElements.appendChild(li);
-  });
+  if (!todoElements) return
+  todoElements.innerHTML = ''
+  const todos = getTodos()
+  todos.forEach((task) => {
+    const li = document.createElement('li')
+    li.textContent = task
+    todoElements.appendChild(li)
+  })
 }
 
 function displayError() {
@@ -43,12 +43,12 @@ function addTodo() {
   if (task === '') {
     displayError()
   } else {
-    const todos = getTodos();
-    todos.push(task);
-    saveTodos(todos);
-    todoInput.value = '';
-    clearError();
-    renderTodos();
+    const todos = getTodos()
+    todos.push(task)
+    saveTodos(todos)
+    todoInput.value = ''
+    clearError()
+    renderTodos()
   }
 }
 
