@@ -12,17 +12,17 @@ function saveTodos(todos: string[]) {
 }
 
 function getTodos(): string[] {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return [];
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (!saved) return []
   try {
-    const todos: unknown = JSON.parse(saved);
+    const todos: unknown = JSON.parse(saved)
     if (Array.isArray(todos)) {
-      return todos as string[];
+      return todos as string[]
     }
-    return [];
+    return []
   } catch (e) {
-    console.error('Failed to parse todos from localStorage:', e);
-    return []; 
+    console.error('Failed to parse todos from localStorage:', e)
+    return []
   }
 }
 
@@ -62,13 +62,12 @@ function addTodo() {
   }
 }
 if (!todoInput || !addButton || !todoElements || !errorMessage) {
-  throw new Error('Critical UI elements are missing. The app cannot start.');
+  throw new Error('Critical UI elements are missing. The app cannot start.')
 }
-  addButton.addEventListener('click', addTodo)
-  todoInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-      addTodo()
-    }
-  })
-  renderTodos()
-
+addButton.addEventListener('click', addTodo)
+todoInput.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    addTodo()
+  }
+})
+renderTodos()
