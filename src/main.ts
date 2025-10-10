@@ -4,7 +4,7 @@ const todoInput = document.querySelector<HTMLInputElement>('#todo-input')
 const addButton = document.getElementById('add-todo-button')
 const todoElements = document.getElementById('todo-elements')
 const errorMessage = document.getElementById('error-message')
-function isError() {
+function displayError() {
   if (errorMessage) {
     errorMessage.textContent = 'Please enter a task!'
   }
@@ -16,9 +16,9 @@ function clearError() {
 }
 function addTodo() {
   if (!todoInput || !todoElements) return
-  const task = todoInput.value
+  const task = todoInput.value.trim()
   if (task === '') {
-    isError()
+    displayError()
   } else {
     const newItem = document.createElement('li')
     newItem.textContent = task
