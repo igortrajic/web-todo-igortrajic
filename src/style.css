@@ -27,9 +27,10 @@ h1 {
 }
 
 #add-todo-button {
-  padding: 10px 15px;
+  padding: 0.5rem 2rem;
   font-size: 16px;
   margin-left: 5px;
+  background-color: #c1f0ac;
 }
 
 #todo-elements li {
@@ -53,8 +54,16 @@ h1 {
 
 .completed {
   opacity: 0.6;
-  background-color: #f7f7f7;
-  border-left: 5px solid #28a745;
+  background-color: #c1f0ac;
+  border-left: 5px solid #0cbe35;
+}
+
+.remove-button {
+  border-color: rgba(0, 0, 0, 0.535);
+  border-radius: 30%;
+  background-color: rgb(232, 142, 142);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
 }
 
 #error-message {
