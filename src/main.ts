@@ -7,17 +7,20 @@ const errorMessage = document.getElementById('error-message')
 
 const STORAGE_KEY = 'todo-list'
 
-function saveTodos(todos: string[]) {
+function saveTodos(todos: ListElement[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
 }
 
-function getTodos(): string[] {
+function getTodos(): ListElement[] {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (!saved) return []
   try {
     const todos: unknown = JSON.parse(saved)
     if (Array.isArray(todos)) {
-      return todos as string[]
+      return todos.filter(
+        (todo) =>
+          typeof todo.element === 'string' && typeof todo.done === 'boolean',
+      ) as ListElement[]
     }
     return []
   } catch (e) {
@@ -25,16 +28,61 @@ function getTodos(): string[] {
     return []
   }
 }
+function toggleTodoDone(index: number) {
+  const todos = getTodos()
+  todos[index].done = !todos[index].done
+  saveTodos(todos)
+  renderTodos()
+}
 
 function renderTodos() {
   if (!todoElements) return
   todoElements.innerHTML = ''
   const todos = getTodos()
-  todos.forEach((task) => {
+
+  todos.forEach((todo, index) => {
     const li = document.createElement('li')
-    li.textContent = task
+
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    checkbox.checked = todo.done
+    checkbox.id = `todo-${index}`
+    checkbox.addEventListener('change', () => {
+      toggleTodoDone(index)
+    })
+
+    const status = document.createElement('span')
+    status.classList.add('todo-status')
+
+    if (todo.done) {
+      status.textContent = 'completed'
+    } else {
+      status.textContent = ''
+    }
+
+    const controlGroup = document.createElement('div')
+    controlGroup.classList.add('todo-controls')
+    controlGroup.appendChild(checkbox)
+    controlGroup.appendChild(status)
+
+    const text = document.createElement('span')
+    text.textContent = todo.element
+    text.classList.add('todo-text')
+
+    if (todo.done) {
+      li.classList.add('completed')
+    }
+
+    li.appendChild(controlGroup)
+    li.appendChild(text)
+
     todoElements.appendChild(li)
   })
+}
+
+interface ListElement {
+  element: string
+  done: boolean
 }
 
 function displayError() {
@@ -54,7 +102,7 @@ function addTodo() {
     displayError()
   } else {
     const todos = getTodos()
-    todos.push(task)
+    todos.push({ element: task, done: false })
     saveTodos(todos)
     todoInput.value = ''
     clearError()

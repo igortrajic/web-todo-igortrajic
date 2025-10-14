@@ -32,16 +32,29 @@ h1 {
   margin-left: 5px;
 }
 
-#todo-elements {
-  list-style-type: none;
-  padding: 0;
-  margin-top: 20px;
-  text-align: left;
-}
-
 #todo-elements li {
   padding: 8px;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.todo-controls {
+  display: flex;
+  align-items: center;
+}
+
+.todo-status {
+  margin-left: 5px;
+  font-size: 0.8em;
+  color: green;
+}
+
+.completed {
+  opacity: 0.6;
+  background-color: #f7f7f7;
+  border-left: 5px solid #28a745;
 }
 
 #error-message {
