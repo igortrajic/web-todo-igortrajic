@@ -42,6 +42,9 @@ h1 {
 #todo-elements li {
   padding: 8px;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
 }
 
 #error-message {

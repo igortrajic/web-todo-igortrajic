@@ -7,17 +7,20 @@ const errorMessage = document.getElementById('error-message')
 
 const STORAGE_KEY = 'todo-list'
 
-function saveTodos(todos: string[]) {
+function saveTodos(todos: listElement[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
 }
 
-function getTodos(): string[] {
+function getTodos(): listElement[] {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (!saved) return []
   try {
     const todos: unknown = JSON.parse(saved)
     if (Array.isArray(todos)) {
-      return todos as string[]
+      return todos.filter(
+        (todo) =>
+          typeof todo.element === 'string' && typeof todo.done === 'boolean',
+      ) as listElement[]
     }
     return []
   } catch (e) {
@@ -25,16 +28,44 @@ function getTodos(): string[] {
     return []
   }
 }
+function toggleTodoDone(index: number) {
+  const todos = getTodos()
+  todos[index].done = !todos[index].done
+  saveTodos(todos)
+  renderTodos()
+}
 
 function renderTodos() {
   if (!todoElements) return
   todoElements.innerHTML = ''
   const todos = getTodos()
-  todos.forEach((task) => {
+  todos.forEach((todo, index) => {
     const li = document.createElement('li')
-    li.textContent = task
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    checkbox.checked = todo.done
+    li.appendChild(checkbox)
+    checkbox.addEventListener('change', () => {
+      toggleTodoDone(index)
+    })
+    const text = document.createElement('span')
+    text.textContent = todo.element
+
+    const status = document.createElement('span')
+    status.textContent = todo.done ? 'completed' : ''
+
+    const statusContainer = document.createElement('div')
+    statusContainer.appendChild(checkbox)
+    statusContainer.appendChild(status)
+
+    li.appendChild(statusContainer)
+    li.appendChild(text)
     todoElements.appendChild(li)
   })
+}
+interface listElement {
+  element: string
+  done: boolean
 }
 
 function displayError() {
@@ -54,7 +85,7 @@ function addTodo() {
     displayError()
   } else {
     const todos = getTodos()
-    todos.push(task)
+    todos.push({ element: task, done: false })
     saveTodos(todos)
     todoInput.value = ''
     clearError()
