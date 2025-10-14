@@ -7,11 +7,11 @@ const errorMessage = document.getElementById('error-message')
 
 const STORAGE_KEY = 'todo-list'
 
-function saveTodos(todos: listElement[]) {
+function saveTodos(todos: ListElement[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
 }
 
-function getTodos(): listElement[] {
+function getTodos(): ListElement[] {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (!saved) return []
   try {
@@ -20,7 +20,7 @@ function getTodos(): listElement[] {
       return todos.filter(
         (todo) =>
           typeof todo.element === 'string' && typeof todo.done === 'boolean',
-      ) as listElement[]
+      ) as ListElement[]
     }
     return []
   } catch (e) {
@@ -39,31 +39,48 @@ function renderTodos() {
   if (!todoElements) return
   todoElements.innerHTML = ''
   const todos = getTodos()
+
   todos.forEach((todo, index) => {
     const li = document.createElement('li')
+
     const checkbox = document.createElement('input')
     checkbox.type = 'checkbox'
     checkbox.checked = todo.done
-    li.appendChild(checkbox)
+    checkbox.id = `todo-${index}`
     checkbox.addEventListener('change', () => {
       toggleTodoDone(index)
     })
-    const text = document.createElement('span')
-    text.textContent = todo.element
 
     const status = document.createElement('span')
-    status.textContent = todo.done ? 'completed' : ''
+    status.classList.add('todo-status')
 
-    const statusContainer = document.createElement('div')
-    statusContainer.appendChild(checkbox)
-    statusContainer.appendChild(status)
+    if (todo.done) {
+      status.textContent = 'completed'
+    } else {
+      status.textContent = ''
+    }
 
-    li.appendChild(statusContainer)
+    const controlGroup = document.createElement('div')
+    controlGroup.classList.add('todo-controls')
+    controlGroup.appendChild(checkbox)
+    controlGroup.appendChild(status)
+
+    const text = document.createElement('span')
+    text.textContent = todo.element
+    text.classList.add('todo-text')
+
+    if (todo.done) {
+      li.classList.add('completed')
+    }
+
+    li.appendChild(controlGroup)
     li.appendChild(text)
+
     todoElements.appendChild(li)
   })
 }
-interface listElement {
+
+interface ListElement {
   element: string
   done: boolean
 }
