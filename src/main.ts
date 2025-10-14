@@ -65,6 +65,20 @@ function renderTodos() {
     controlGroup.appendChild(checkbox)
     controlGroup.appendChild(status)
 
+    function deleteTodo(index: number) {
+      const todos = getTodos()
+      todos.splice(index, 1)
+      saveTodos(todos)
+      renderTodos()
+    }
+    const removeButton = document.createElement('button')
+    removeButton.textContent = 'remove'
+    removeButton.classList.add('removebut')
+    removeButton.addEventListener('click', () => {
+      deleteTodo(index)
+      clearError()
+    })
+
     const text = document.createElement('span')
     text.textContent = todo.element
     text.classList.add('todo-text')
@@ -75,6 +89,7 @@ function renderTodos() {
 
     li.appendChild(controlGroup)
     li.appendChild(text)
+    li.appendChild(removeButton)
 
     todoElements.appendChild(li)
   })
