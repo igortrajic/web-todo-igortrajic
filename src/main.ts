@@ -35,12 +35,12 @@ function toggleTodoDone(index: number) {
   renderTodos()
 }
 
- function deleteTodo(index: number) {
-      const todos = getTodos()
-      todos.splice(index, 1)
-      saveTodos(todos)
-      renderTodos()
-    }
+function deleteTodo(index: number) {
+  const todos = getTodos()
+  todos.splice(index, 1)
+  saveTodos(todos)
+  renderTodos()
+}
 
 function renderTodos() {
   if (!todoElements) return
