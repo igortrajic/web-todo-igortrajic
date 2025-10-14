@@ -35,6 +35,13 @@ function toggleTodoDone(index: number) {
   renderTodos()
 }
 
+ function deleteTodo(index: number) {
+      const todos = getTodos()
+      todos.splice(index, 1)
+      saveTodos(todos)
+      renderTodos()
+    }
+
 function renderTodos() {
   if (!todoElements) return
   todoElements.innerHTML = ''
@@ -65,15 +72,9 @@ function renderTodos() {
     controlGroup.appendChild(checkbox)
     controlGroup.appendChild(status)
 
-    function deleteTodo(index: number) {
-      const todos = getTodos()
-      todos.splice(index, 1)
-      saveTodos(todos)
-      renderTodos()
-    }
     const removeButton = document.createElement('button')
     removeButton.textContent = 'remove'
-    removeButton.classList.add('removebut')
+    removeButton.classList.add('remove-button')
     removeButton.addEventListener('click', () => {
       deleteTodo(index)
       clearError()
