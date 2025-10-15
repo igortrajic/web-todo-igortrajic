@@ -4,6 +4,7 @@ const todoInput = document.querySelector<HTMLInputElement>('#todo-input')
 const addButton = document.getElementById('add-todo-button')
 const todoElements = document.getElementById('todo-elements')
 const errorMessage = document.getElementById('error-message')
+const deleteAllButton = document.getElementById('delete-all')
 
 const STORAGE_KEY = 'todo-list'
 
@@ -39,6 +40,12 @@ function deleteTodo(index: number) {
   const todos = getTodos()
   todos.splice(index, 1)
   saveTodos(todos)
+  renderTodos()
+}
+
+function deleteAllTodo() {
+  const emptyTodos: ListElement[] = []
+  saveTodos(emptyTodos)
   renderTodos()
 }
 
@@ -78,6 +85,10 @@ function renderTodos() {
     removeButton.addEventListener('click', () => {
       deleteTodo(index)
       clearError()
+    })
+
+    deleteAllButton?.addEventListener('click', () => {
+      deleteAllTodo()
     })
 
     const text = document.createElement('span')
