@@ -44,8 +44,7 @@ function deleteTodo(index: number) {
 }
 
 function deleteAllTodo() {
-  const emptyTodos: ListElement[] = []
-  saveTodos(emptyTodos)
+  saveTodos([])
   renderTodos()
 }
 
@@ -85,10 +84,6 @@ function renderTodos() {
     removeButton.addEventListener('click', () => {
       deleteTodo(index)
       clearError()
-    })
-
-    deleteAllButton?.addEventListener('click', () => {
-      deleteAllTodo()
     })
 
     const text = document.createElement('span')
@@ -144,5 +139,6 @@ todoInput.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     addTodo()
   }
+  deleteAllButton?.addEventListener('click', deleteAllTodo)
 })
 renderTodos()
