@@ -12,7 +12,7 @@ h1 {
 }
 
 .todostart {
-  max-width: 600px;
+  max-width: 800px;
   margin: 100px auto;
   padding: 20px;
   background: white;
@@ -21,7 +21,7 @@ h1 {
 }
 
 #todo-input {
-  width: 70%;
+  width: 60%;
   padding: 10px;
   font-size: 16px;
 }
@@ -31,6 +31,13 @@ h1 {
   font-size: 16px;
   margin-left: 5px;
   background-color: #c1f0ac;
+}
+
+#delete-all {
+  padding: 0.5rem 2rem;
+  font-size: 16px;
+  margin-left: 5px;
+  background-color: #ff0000;
 }
 
 #todo-elements li {
