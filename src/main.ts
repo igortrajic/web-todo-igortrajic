@@ -77,8 +77,13 @@ function renderTodos() {
       status.textContent = ''
     }
 
-    const dueDateSpan = document.createElement('span')
-    dueDateSpan.textContent = todo.dueDate ? `${todo.dueDate}` : 'no due date'
+    const dueDateElement = document.createElement('time')
+    if (todo.dueDate) {
+      dueDateElement.dateTime = todo.dueDate
+      dueDateElement.textContent = todo.dueDate
+    } else {
+      dueDateElement.textContent = 'no due date'
+    }
 
     const controlGroup = document.createElement('div')
     controlGroup.classList.add('todo-controls')
@@ -96,7 +101,7 @@ function renderTodos() {
     const removeAndDate = document.createElement('div')
     removeAndDate.classList.add('remove-and-date')
     removeAndDate.appendChild(removeButton)
-    removeAndDate.appendChild(dueDateSpan)
+    removeAndDate.appendChild(dueDateElement)
 
     const text = document.createElement('span')
     text.textContent = todo.element
@@ -145,15 +150,13 @@ function addTodo() {
   if (dueDate) {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-
-    const userDueDate = new Date(dueDate)
-    userDueDate.setHours(0, 0, 0, 0)
-
+    const userDueDate = new Date(`${dueDate}T00:00:00`)
     if (userDueDate < today) {
       displayError()
       return
     }
   }
+
   const todos = getTodos()
   todos.push({ element: task, done: false, dueDate: dueDate })
   saveTodos(todos)
