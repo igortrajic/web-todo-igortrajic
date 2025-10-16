@@ -5,6 +5,8 @@ const addButton = document.getElementById('add-todo-button')
 const todoElements = document.getElementById('todo-elements')
 const errorMessage = document.getElementById('error-message')
 const deleteAllButton = document.getElementById('delete-all')
+const todoDateInput =
+  document.querySelector<HTMLInputElement>('#todo-date-input')
 
 const STORAGE_KEY = 'todo-list'
 
@@ -20,7 +22,9 @@ function getTodos(): ListElement[] {
     if (Array.isArray(todos)) {
       return todos.filter(
         (todo) =>
-          typeof todo.element === 'string' && typeof todo.done === 'boolean',
+          typeof todo.element === 'string' &&
+          typeof todo.done === 'boolean' &&
+          typeof todo.dueDate === 'string',
       ) as ListElement[]
     }
     return []
@@ -73,6 +77,9 @@ function renderTodos() {
       status.textContent = ''
     }
 
+    const dueDateSpan = document.createElement('span')
+    dueDateSpan.textContent = todo.dueDate ? `${todo.dueDate}` : 'no due date'
+
     const controlGroup = document.createElement('div')
     controlGroup.classList.add('todo-controls')
     controlGroup.appendChild(checkbox)
@@ -86,6 +93,11 @@ function renderTodos() {
       clearError()
     })
 
+    const removeAndDate = document.createElement('div')
+    removeAndDate.classList.add('remove-and-date')
+    removeAndDate.appendChild(removeButton)
+    removeAndDate.appendChild(dueDateSpan)
+
     const text = document.createElement('span')
     text.textContent = todo.element
     text.classList.add('todo-text')
@@ -96,7 +108,7 @@ function renderTodos() {
 
     li.appendChild(controlGroup)
     li.appendChild(text)
-    li.appendChild(removeButton)
+    li.appendChild(removeAndDate)
 
     todoElements.appendChild(li)
   })
@@ -105,11 +117,16 @@ function renderTodos() {
 interface ListElement {
   element: string
   done: boolean
+  dueDate: string
 }
 
 function displayError() {
   if (errorMessage) {
-    errorMessage.textContent = 'Please enter a task!'
+    errorMessage.textContent = 'Please enter a task with a valid date!'
+  }
+  if (todoDateInput && todoInput) {
+    todoDateInput.value = ''
+    todoInput.value = ''
   }
 }
 function clearError() {
@@ -118,19 +135,34 @@ function clearError() {
   }
 }
 function addTodo() {
-  if (!todoInput || !todoElements) return
+  if (!todoInput || !todoElements || !todoDateInput) return
   const task = todoInput.value.trim()
+  const dueDate = todoDateInput.value
   if (task === '') {
     displayError()
-  } else {
-    const todos = getTodos()
-    todos.push({ element: task, done: false })
-    saveTodos(todos)
-    todoInput.value = ''
-    clearError()
-    renderTodos()
+    return
   }
+  if (dueDate) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const userDueDate = new Date(dueDate)
+    userDueDate.setHours(0, 0, 0, 0)
+
+    if (userDueDate < today) {
+      displayError()
+      return
+    }
+  }
+  const todos = getTodos()
+  todos.push({ element: task, done: false, dueDate: dueDate })
+  saveTodos(todos)
+  todoInput.value = ''
+  todoDateInput.value = ''
+  clearError()
+  renderTodos()
 }
+
 if (!todoInput || !addButton || !todoElements || !errorMessage) {
   throw new Error('Critical UI elements are missing. The app cannot start.')
 }
@@ -139,6 +171,6 @@ todoInput.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     addTodo()
   }
-  deleteAllButton?.addEventListener('click', deleteAllTodo)
 })
+deleteAllButton?.addEventListener('click', deleteAllTodo)
 renderTodos()
