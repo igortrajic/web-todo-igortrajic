@@ -83,3 +83,16 @@ h1 {
   align-items: center;
   gap: 5px;
 }
+
+#todo-elements li time.due-past {
+  background-color: red;
+}
+#todo-elements li time.due-today {
+  background-color: orange;
+}
+#todo-elements li time.due-soon {
+  background-color: yellow;
+}
+#todo-elements li time.due-later {
+  background-color: green;
+}

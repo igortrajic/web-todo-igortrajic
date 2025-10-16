@@ -79,12 +79,31 @@ function renderTodos() {
 
     const dueDateElement = document.createElement('time')
     if (todo.dueDate) {
+      const dueDate = new Date(todo.dueDate)
+      const today = new Date()
+
+      dueDate.setHours(0, 0, 0, 0)
+      today.setHours(0, 0, 0, 0)
+
+      const dayDiff = Math.floor(
+        (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+      )
+
       dueDateElement.dateTime = todo.dueDate
       dueDateElement.textContent = todo.dueDate
+
+      if (dayDiff < 0) {
+        dueDateElement.classList.add('due-past')
+      } else if (dayDiff === 0) {
+        dueDateElement.classList.add('due-today')
+      } else if (dayDiff >= 1 && dayDiff <= 4) {
+        dueDateElement.classList.add('due-soon')
+      } else if (dayDiff > 4) {
+        dueDateElement.classList.add('due-later')
+      }
     } else {
       dueDateElement.textContent = 'no due date'
     }
-
     const controlGroup = document.createElement('div')
     controlGroup.classList.add('todo-controls')
     controlGroup.appendChild(checkbox)
@@ -166,7 +185,13 @@ function addTodo() {
   renderTodos()
 }
 
-if (!todoInput || !addButton || !todoElements || !errorMessage) {
+if (
+  !todoInput ||
+  !addButton ||
+  !todoElements ||
+  !errorMessage ||
+  !deleteAllButton
+) {
   throw new Error('Critical UI elements are missing. The app cannot start.')
 }
 addButton.addEventListener('click', addTodo)
