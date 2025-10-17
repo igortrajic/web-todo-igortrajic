@@ -7,7 +7,7 @@ const errorMessage = document.getElementById('error-message')
 const deleteAllButton = document.getElementById('delete-all')
 const todoDateInput =
   document.querySelector<HTMLInputElement>('#todo-date-input')
-
+const overdueMessage = document.getElementById('overdue-message')
 const STORAGE_KEY = 'todo-list'
 
 function saveTodos(todos: ListElement[]) {
@@ -56,6 +56,7 @@ function renderTodos() {
   if (!todoElements) return
   todoElements.innerHTML = ''
   const todos = getTodos()
+  let isOverdue = false
 
   todos.forEach((todo, index) => {
     const li = document.createElement('li')
@@ -94,7 +95,11 @@ function renderTodos() {
 
       if (dayDiff < 0) {
         dueDateElement.classList.add('due-past')
-      } else if (dayDiff === 0) {
+        if (!todo.done) {
+          isOverdue = true
+        }
+      }
+      if (dayDiff === 0) {
         dueDateElement.classList.add('due-today')
       } else if (dayDiff >= 1 && dayDiff <= 4) {
         dueDateElement.classList.add('due-soon')
@@ -136,6 +141,13 @@ function renderTodos() {
 
     todoElements.appendChild(li)
   })
+  if (isOverdue) {
+    displayOverdueError()
+  } else {
+    if (overdueMessage) {
+      overdueMessage.textContent = ''
+    }
+  }
 }
 
 interface ListElement {
@@ -153,9 +165,16 @@ function displayError() {
     todoInput.value = ''
   }
 }
+
+function displayOverdueError() {
+  if (overdueMessage) {
+    overdueMessage.textContent = 'OVERDUE TASK'
+  }
+}
 function clearError() {
-  if (errorMessage) {
+  if (errorMessage && overdueMessage) {
     errorMessage.textContent = ''
+    overdueMessage.textContent = ''
   }
 }
 function addTodo() {
