@@ -96,3 +96,9 @@ h1 {
 #todo-elements li time.due-later {
   background-color: green;
 }
+
+#overdue-message {
+  background-color: #ff0000;
+  color: white;
+  font-size: 2rem;
+}
