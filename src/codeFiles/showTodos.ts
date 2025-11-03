@@ -1,4 +1,4 @@
-import type { ListElement } from './storagetodos'
+import type { ListElement } from './types'
 
 export interface MessageUpdater {
   update(message: string): void
@@ -8,8 +8,8 @@ export interface MessageUpdater {
 export interface RenderTodosDeps {
   todoContainer: HTMLElement
   todos: ListElement[]
-  toggleTodo: (index: number) => void
-  removeTodo: (index: number) => void
+  toggleTodo: (id: number) => void
+  removeTodo: (id: number) => void
   dateDiff: (dateString: string, today?: Date) => number
   overdueUpdater: MessageUpdater
   errorUpdater: MessageUpdater
@@ -27,24 +27,27 @@ export function renderTodos({
   todoContainer.innerHTML = ''
   let isOverdue = false
 
-  todos.forEach((todo, index) => {
+  todos.forEach((todo, id) => {
+    console.log('Rendering todo:', todo)
     const li = document.createElement('li')
 
     const checkbox = document.createElement('input')
     checkbox.type = 'checkbox'
     checkbox.checked = todo.done
-    checkbox.id = `todo-${index}`
-    checkbox.addEventListener('change', () => toggleTodo(index))
+    checkbox.id = `todo-${id}`
+    checkbox.addEventListener('change', () => {
+      if (todo.id !== undefined) toggleTodo(todo.id)
+    })
 
     const status = document.createElement('span')
     status.classList.add('todo-status')
     status.textContent = todo.done ? 'completed' : ''
 
     const dueDateElement = document.createElement('time')
-    if (todo.dueDate) {
-      const dayDiff = dateDiff(todo.dueDate)
-      dueDateElement.dateTime = todo.dueDate
-      dueDateElement.textContent = todo.dueDate
+    if (todo.due_date) {
+      const dayDiff = dateDiff(todo.due_date)
+      dueDateElement.dateTime = todo.due_date
+      dueDateElement.textContent = todo.due_date
 
       if (dayDiff < 0) {
         dueDateElement.classList.add('due-past')
@@ -69,8 +72,10 @@ export function renderTodos({
     removeButton.textContent = 'remove'
     removeButton.classList.add('remove-button')
     removeButton.addEventListener('click', () => {
-      removeTodo(index)
-      errorUpdater.clear()
+      if (todo.id !== undefined) {
+        removeTodo(todo.id)
+        errorUpdater.clear()
+      }
     })
 
     const removeAndDate = document.createElement('div')
@@ -79,7 +84,7 @@ export function renderTodos({
     removeAndDate.appendChild(dueDateElement)
 
     const text = document.createElement('span')
-    text.textContent = todo.element
+    text.textContent = todo.title
     text.classList.add('todo-text')
 
     if (todo.done) li.classList.add('completed')

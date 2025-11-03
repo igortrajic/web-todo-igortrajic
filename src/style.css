@@ -102,3 +102,15 @@ h1 {
   color: white;
   font-size: 2rem;
 }
+
+#loading-spinner {
+  display: none;
+  text-align: center;
+  margin: 10px 0;
+  font-style: italic;
+  color: #666;
+}
+
+#loading-spinner.visible {
+  display: block;
+}

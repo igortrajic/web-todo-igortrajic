@@ -1,4 +1,12 @@
+import {
+  addTodoApi,
+  deleteAllTodosApi,
+  deleteTodoApi,
+  getTodosFromApi,
+  updateTodoApi,
+} from '../api/todo-api.ts'
 import { getDateDiffFromToday } from './datedifference.ts'
+import { loadingSpinner } from './documentID'
 import {
   errorMessage,
   todoDateInput,
@@ -7,19 +15,21 @@ import {
 } from './documentID.ts'
 import { createMessageUpdater } from './messages.ts'
 import { renderTodos } from './showTodos.ts'
-import { getTodos, saveTodos } from './storagetodos.ts'
+import type { ListElement } from './types.ts'
 
 const messageUpdater = createMessageUpdater(errorMessage)
 
-export function renderApp() {
+export async function renderApp() {
   if (!todoElements) {
     console.error('Todo container not found. Cannot render todos.')
     return
   }
 
+  const todos = await getTodosFromApi()
+
   renderTodos({
     todoContainer: todoElements,
-    todos: getTodos(),
+    todos,
     toggleTodo: toggleTodoDone,
     removeTodo: deleteTodo,
     dateDiff: getDateDiffFromToday,
@@ -28,11 +38,18 @@ export function renderApp() {
   })
 }
 
-export function toggleTodoDone(index: number) {
-  const todos = getTodos()
-  todos[index].done = !todos[index].done
-  saveTodos(todos)
-  renderApp()
+export async function toggleTodoDone(id: number) {
+  const todos: ListElement[] = await getTodosFromApi()
+  const todoToUpdate = todos.find((todo) => todo.id === id)
+  if (!todoToUpdate) {
+    console.warn('todo not found')
+    return
+  }
+  const response = await updateTodoApi(id, { done: !todoToUpdate.done })
+  if (!response.ok) {
+    throw new Error(`Failed to update todo: ${response.status}`)
+  }
+  await renderApp()
 }
 
 export function resetInputs() {
@@ -40,20 +57,35 @@ export function resetInputs() {
   if (todoDateInput) todoDateInput.value = ''
 }
 
-export function deleteTodo(index: number) {
-  const todos = getTodos()
-  todos.splice(index, 1)
-  saveTodos(todos)
-  renderApp()
+export async function deleteTodo(id: number) {
+  showLoading()
+  try {
+    await deleteTodoApi(id)
+    await renderApp()
+  } catch (error) {
+    console.error('Error deleting todo:', error)
+    messageUpdater.update('Error deleting todo')
+  } finally {
+    hideLoading()
+  }
 }
 
-export function deleteAllTodo() {
-  saveTodos([])
-  renderApp()
+export async function deleteAllTodo() {
+  showLoading()
+  try {
+    await deleteAllTodosApi()
+    await renderApp()
+  } catch (error) {
+    console.error('Error deleting all todos:', error)
+    messageUpdater.update('Error deleting all todos')
+  } finally {
+    hideLoading()
+  }
 }
 
-export function addTodo() {
+export async function addTodo() {
   if (!todoInput || !todoElements || !todoDateInput) return
+  messageUpdater.clear()
   const task = todoInput.value.trim()
   const dueDate = todoDateInput.value
   if (task === '') {
@@ -64,14 +96,40 @@ export function addTodo() {
     const dayDiff = getDateDiffFromToday(dueDate)
     if (dayDiff < 0) {
       messageUpdater.update('Due date cannot be in the past!')
+      todoDateInput.value = ''
       return
     }
   }
+  const newTodo: ListElement = {
+    title: task,
+    content: task,
+    done: false,
+    due_date: dueDate || null,
+  }
 
-  const todos = getTodos()
-  todos.push({ element: task, done: false, dueDate: dueDate })
-  saveTodos(todos)
-  resetInputs()
-  messageUpdater.clear()
-  renderApp()
+  showLoading()
+
+  try {
+    const response = await addTodoApi(newTodo)
+    if (!response.ok) throw new Error('Failed to save todo')
+
+    todoInput.value = ''
+    todoDateInput.value = ''
+    messageUpdater.clear()
+
+    await renderApp()
+  } catch (error) {
+    console.error('Error:', error)
+    messageUpdater.update('Error saving todo')
+  } finally {
+    hideLoading()
+  }
+}
+
+function showLoading() {
+  loadingSpinner?.classList.add('visible')
+}
+
+function hideLoading() {
+  loadingSpinner?.classList.remove('visible')
 }
