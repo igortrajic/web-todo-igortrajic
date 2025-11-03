@@ -10,3 +10,4 @@ export const todoDateInput =
 export const overdueMessage = document.getElementById(
   'overdue-message',
 ) as HTMLElement
+export const loadingSpinner = document.getElementById('loading-spinner')
