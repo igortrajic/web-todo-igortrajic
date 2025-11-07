@@ -28,7 +28,6 @@ export function renderTodos({
   let isOverdue = false
 
   todos.forEach((todo, id) => {
-    console.log('Rendering todo:', todo)
     const li = document.createElement('li')
 
     const checkbox = document.createElement('input')

@@ -5,3 +5,9 @@ export interface ListElement {
   done: boolean
   due_date: string | null
 }
+
+export interface CategoryElement {
+  id?: number
+  title: string
+  color: string
+}
