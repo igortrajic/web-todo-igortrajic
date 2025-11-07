@@ -18,6 +18,14 @@ import type { CategoryElement } from './types'
 
 let editingCategoryId: number | null = null
 
+function resetCategoryForm() {
+  editingCategoryId = null
+  if (categoryName) categoryName.value = ''
+  if (categoryColor) categoryColor.value = '#000000'
+  addCategoryButton.textContent = 'Add Category'
+  setDeleteAllDefault()
+}
+
 export async function addCategory() {
   if (!categoryName || !categoryColor) return
   const nameValue = categoryName.value.trim()
@@ -44,11 +52,7 @@ export async function addCategory() {
     renderCategory({ categoryContainer: categoryList, category: categories })
   }
 
-  categoryName.value = ''
-  categoryColor.value = '#000000'
-  addCategoryButton.textContent = 'Add Category'
-  setDeleteAllDefault()
-  editingCategoryId = null
+  resetCategoryForm()
 }
 
 export interface RenderCategoryDeps {
@@ -107,11 +111,7 @@ export function renderCategory({
       deleteAllCategoriesButton.textContent = 'Cancel'
 
       deleteAllCategoriesButton.onclick = () => {
-        editingCategoryId = null
-        if (categoryName) categoryName.value = ''
-        if (categoryColor) categoryColor.value = '#000000'
-        addCategoryButton.textContent = 'Add Category'
-        setDeleteAllDefault()
+        resetCategoryForm()
       }
 
       categoryModal.classList.remove('hidden')
