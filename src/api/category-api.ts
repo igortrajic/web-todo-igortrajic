@@ -31,13 +31,13 @@ export async function deleteCategoryApi(id: number): Promise<Response> {
 }
 
 export async function deleteAllCategoriesApi(): Promise<void> {
-  const categories = await getCategoriesFromApi()
-  for (const category of categories) {
-    if (category.id !== undefined) {
-      await deleteCategoryApi(category.id)
+     const response = await fetch(API_URL, {
+      method: 'DELETE'
+    })
+    if (response.ok){
+      return
     }
   }
-}
 
 export async function updateCategoryApi(
   id: number,
