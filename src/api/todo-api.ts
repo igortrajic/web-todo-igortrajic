@@ -33,10 +33,10 @@ export async function deleteTodoApi(id: number): Promise<Response> {
 }
 
 export async function deleteAllTodosApi(): Promise<void> {
-    const response = await fetch(API_URL, {
-      method: 'DELETE'
-    })
-    if (response.ok) {
-      return
-    }
+  const response = await fetch(API_URL, {
+    method: 'DELETE',
+  })
+  if (response.ok) {
+    return
+  }
 }
