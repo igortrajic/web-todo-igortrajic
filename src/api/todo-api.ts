@@ -1,18 +1,38 @@
 import type { ListElement } from '../codeFiles/types'
 
+const API_URL = 'https://api.todos.in.jt-lab.ch/todos'
+
 export async function getTodosFromApi(): Promise<ListElement[]> {
-  const response = await fetch('https://api.todos.in.jt-lab.ch/todos')
+  const response = await fetch(
+    'https://api.todos.in.jt-lab.ch/todos?select=*,categories_todos(categories(title,color))',
+  )
   const todos = await response.json()
   return todos
 }
-const API_URL = 'https://api.todos.in.jt-lab.ch/todos'
 
-export async function addTodoApi(todo: ListElement): Promise<Response> {
-  return await fetch(API_URL, {
+export async function addTodoApi(todo: ListElement): Promise<ListElement> {
+  const response = await fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Prefer: 'return=representation',
+    },
     body: JSON.stringify(todo),
   })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`Failed to create todo: ${response.status} - ${errorText}`)
+  }
+
+  const data = await response.json()
+  const createdTodo = Array.isArray(data) ? data[0] : data
+
+  if (!createdTodo?.id) {
+    throw new Error('Todo created but no id returned')
+  }
+
+  return createdTodo
 }
 
 export async function updateTodoApi(

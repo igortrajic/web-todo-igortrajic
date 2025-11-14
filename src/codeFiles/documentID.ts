@@ -36,3 +36,15 @@ export const deleteAllCategoriesButton = document.getElementById(
 export const errorMessageCategory = document.getElementById(
   'error-message-category',
 ) as HTMLElement
+export const selectCategoryModal = document.getElementById(
+  'select-category-modal',
+) as HTMLElement
+export const openSelectCategory = document.getElementById(
+  'open-select-category',
+) as HTMLButtonElement
+export const closeSelectCategory = document.getElementById(
+  'close-select-category',
+) as HTMLButtonElement
+export const selectCategoryList = document.getElementById(
+  'select-category-list',
+) as HTMLElement

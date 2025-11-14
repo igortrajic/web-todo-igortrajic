@@ -1,3 +1,4 @@
+import { addCategoryTodoLinkApi } from '../api/categories_todo-api.ts'
 import {
   addTodoApi,
   deleteAllTodosApi,
@@ -5,6 +6,7 @@ import {
   getTodosFromApi,
   updateTodoApi,
 } from '../api/todo-api.ts'
+import { selectedCategoryId, setSelectedCategoryId } from './categories.ts'
 import { getDateDiffFromToday } from './datedifference.ts'
 import { loadingSpinner } from './documentID'
 import {
@@ -108,11 +110,14 @@ export async function addTodo() {
   }
 
   showLoading()
-
   try {
-    const response = await addTodoApi(newTodo)
-    if (!response.ok) throw new Error('Failed to save todo')
+    const createdTodo = await addTodoApi(newTodo)
+    const newTodoId = createdTodo.id
 
+    if (selectedCategoryId != null && newTodoId != null) {
+      await addCategoryTodoLinkApi(selectedCategoryId, newTodoId)
+    }
+    setSelectedCategoryId(null)
     todoInput.value = ''
     todoDateInput.value = ''
     messageUpdater.clear()
