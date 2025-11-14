@@ -8,7 +8,6 @@
   </head>
   <body>
   <h1>Web todolist app</h1>
-    <script type="module" src="/src/main.ts"></script>
     <div id="loading-spinner" class="hidden">⏳ Loading...</div>
     <main class="todostart">
       <p id="error-message"></p>
@@ -17,6 +16,7 @@
       <div class="userinput">
         <input type="text" id="todo-input" placeholder="Enter a task" />
         <button id="open-category-modal">Manage Categories</button>
+        <button id="open-select-category">Select Category</button>
         <input type="date" id="todo-date-input" class="date-input"/>
         <button id="add-todo-button">Add</button>
         <button id="delete-all">Delete All</button>
@@ -37,6 +37,14 @@
           <button id="close-category-modal">Close</button>
         </div>
       </div>
+      <div id="select-category-modal" class="hidden">
+        <div class="modal-content">
+          <h2>Select Category</h2>
+          <ul id="select-category-list"></ul>
+          <button id="close-select-category">Close</button>
+        </div>
+      </div>
     </main>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
