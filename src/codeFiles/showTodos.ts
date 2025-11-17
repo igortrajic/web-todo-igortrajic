@@ -30,6 +30,10 @@ export function renderTodos({
   todos.forEach((todo, id) => {
     const li = document.createElement('li')
 
+    const categoryColor = todo.categories_todos?.[0]?.categories?.color
+    li.style.border = `2px solid ${categoryColor}`
+    li.style.borderRadius = '8px'
+
     const checkbox = document.createElement('input')
     checkbox.type = 'checkbox'
     checkbox.checked = todo.done
@@ -88,6 +92,13 @@ export function renderTodos({
 
     if (todo.done) li.classList.add('completed')
 
+    const todoCategory = document.createElement('span')
+    todoCategory.classList.add('todo-category')
+    if (todo.categories_todos && todo.categories_todos.length > 0)
+      todoCategory.textContent = todo.categories_todos[0].categories.title
+    else todoCategory.textContent = 'No category'
+
+    li.appendChild(todoCategory)
     li.appendChild(controlGroup)
     li.appendChild(text)
     li.appendChild(removeAndDate)

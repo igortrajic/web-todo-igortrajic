@@ -5,16 +5,28 @@ import {
   getCategoriesFromApi,
   updateCategoryApi,
 } from '../api/category-api'
+
 import {
   addCategoryButton,
   categoryColor,
   categoryList,
   categoryModal,
   categoryName,
+  closeCategoryModalButton,
+  closeSelectCategory,
   deleteAllCategoriesButton,
   errorMessageCategory,
+  openCategoryModalButton,
+  openSelectCategory,
+  selectCategoryList,
+  selectCategoryModal,
 } from './documentID'
 import type { CategoryElement } from './types'
+
+export let selectedCategoryId: number | null = null
+export function setSelectedCategoryId(id: number | null) {
+  selectedCategoryId = id
+}
 
 let editingCategoryId: number | null = null
 
@@ -24,6 +36,17 @@ function resetCategoryForm() {
   if (categoryColor) categoryColor.value = '#000000'
   addCategoryButton.textContent = 'Add Category'
   setDeleteAllDefault()
+}
+
+function getContrastColor(hexColor: string): string {
+  const color = hexColor.replace('#', '')
+
+  const r = Number.parseInt(color.substring(0, 2), 16)
+  const g = Number.parseInt(color.substring(2, 4), 16)
+  const b = Number.parseInt(color.substring(4, 6), 16)
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000
+  return brightness > 128 ? '#000000' : '#FFFFFF'
 }
 
 export async function addCategory() {
@@ -51,7 +74,6 @@ export async function addCategory() {
   if (categoryList) {
     renderCategory({ categoryContainer: categoryList, category: categories })
   }
-
   resetCategoryForm()
 }
 
@@ -85,7 +107,8 @@ export function renderCategory({
   category.forEach((item) => {
     const li = document.createElement('li')
     li.textContent = item.title
-    li.style.background = item.color + 60
+    li.style.background = item.color
+    li.style.color = getContrastColor(item.color)
 
     const removeCategory = document.createElement('button')
     removeCategory.textContent = 'remove'
@@ -135,3 +158,45 @@ function setDeleteAllDefault() {
 }
 
 setDeleteAllDefault()
+
+;(async () => {
+  const categories = await getCategoriesFromApi()
+  if (categoryList) {
+    renderCategory({ categoryContainer: categoryList, category: categories })
+  }
+})()
+
+openCategoryModalButton.addEventListener('click', () => {
+  categoryModal.classList.remove('hidden')
+})
+
+closeCategoryModalButton.addEventListener('click', () => {
+  categoryModal.classList.add('hidden')
+})
+
+addCategoryButton.addEventListener('click', addCategory)
+
+openSelectCategory.addEventListener('click', async () => {
+  selectCategoryModal.classList.remove('hidden')
+
+  const categories = await getCategoriesFromApi()
+
+  selectCategoryList.innerHTML = ''
+
+  categories.forEach((category) => {
+    const li = document.createElement('li')
+    li.textContent = category.title
+    li.style.backgroundColor = category.color
+    li.style.color = getContrastColor(category.color)
+    li.addEventListener('click', () => {
+      if (category.id === undefined) return
+      setSelectedCategoryId(category.id)
+      selectCategoryModal.classList.add('hidden')
+    })
+    selectCategoryList.appendChild(li)
+  })
+})
+
+closeSelectCategory.addEventListener('click', () => {
+  selectCategoryModal.classList.add('hidden')
+})

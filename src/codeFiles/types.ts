@@ -4,6 +4,13 @@ export interface ListElement {
   content: string
   done: boolean
   due_date: string | null
+
+  categories_todos?: {
+    categories: {
+      title: string
+      color: string
+    }
+  }[]
 }
 
 export interface CategoryElement {
