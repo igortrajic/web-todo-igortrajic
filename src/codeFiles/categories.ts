@@ -190,7 +190,7 @@ openSelectCategory.addEventListener('click', async () => {
     li.style.color = getContrastColor(category.color)
     li.addEventListener('click', () => {
       if (category.id === undefined) return
-      selectedCategoryId = category.id
+      setSelectedCategoryId(category.id)
       selectCategoryModal.classList.add('hidden')
     })
     selectCategoryList.appendChild(li)

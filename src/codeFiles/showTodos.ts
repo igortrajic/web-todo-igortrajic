@@ -94,7 +94,6 @@ export function renderTodos({
 
     const todoCategory = document.createElement('span')
     todoCategory.classList.add('todo-category')
-    console.log(todo)
     if (todo.categories_todos && todo.categories_todos.length > 0)
       todoCategory.textContent = todo.categories_todos[0].categories.title
     else todoCategory.textContent = 'No category'
