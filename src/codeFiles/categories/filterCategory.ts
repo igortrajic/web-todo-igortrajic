@@ -11,6 +11,6 @@ export async function categoryFilterDropdown() {
     const option = document.createElement('option')
     option.value = String(cat.id)
     option.textContent = cat.title
-    if (categoryFilter) categoryFilter.appendChild(option)
+    categoryFilter?.appendChild(option)
   })
 }
