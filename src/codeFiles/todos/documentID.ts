@@ -48,3 +48,5 @@ export const closeSelectCategory = document.getElementById(
 export const selectCategoryList = document.getElementById(
   'select-category-list',
 ) as HTMLElement
+export const categoryFilter =
+  document.querySelector<HTMLSelectElement>('#category-filter')

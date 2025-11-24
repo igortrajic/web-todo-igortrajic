@@ -1,12 +1,15 @@
-import { addCategoryTodoLinkApi } from '../api/categories_todo-api.ts'
+import { addCategoryTodoLinkApi } from '../../api/categories_todo-api.ts'
 import {
   addTodoApi,
   deleteAllTodosApi,
   deleteTodoApi,
   getTodosFromApi,
   updateTodoApi,
-} from '../api/todo-api.ts'
-import { selectedCategoryId, setSelectedCategoryId } from './categories.ts'
+} from '../../api/todo-api.ts'
+import {
+  selectedCategoryId,
+  setSelectedCategoryId,
+} from '../categories/categories.ts'
 import { getDateDiffFromToday } from './datedifference.ts'
 import { loadingSpinner } from './documentID'
 import {

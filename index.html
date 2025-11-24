@@ -7,19 +7,26 @@
     <title>Web todolist project</title>
   </head>
   <body>
-  <h1>Web todolist app</h1>
+  <h1>Web todolist</h1>
     <div id="loading-spinner" class="hidden">⏳ Loading...</div>
     <main class="todostart">
       <p id="error-message"></p>
       <p id="overdue-message"></p>
       <div class="underinput-and-output" id="todo-section">
       <div class="userinput">
+        <div class="input-with-buttons">
         <input type="text" id="todo-input" placeholder="Enter a task" />
-        <button id="open-category-modal">Manage Categories</button>
-        <button id="open-select-category">Select Category</button>
         <input type="date" id="todo-date-input" class="date-input"/>
         <button id="add-todo-button">Add</button>
         <button id="delete-all">Delete All</button>
+        </div>
+        <div id="category-three-buttons">
+        <button id="open-category-modal">Manage Categories</button>
+        <button id="open-select-category">Select Category</button>
+        <select id="category-filter">
+        <option value="all">All Categories</option>
+        </select>
+        </div>
       </div>  
       <div class="useroutput">
         <ul id="todo-elements"></ul>
