@@ -6,6 +6,7 @@ export interface ListElement {
   due_date: string | null
 
   categories_todos?: {
+    category_id: number
     categories: {
       title: string
       color: string

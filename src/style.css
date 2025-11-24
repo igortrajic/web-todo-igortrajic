@@ -2,13 +2,16 @@ html,
 body {
   padding: 0;
   margin: 0;
+  background-color: #ddd;
 }
 
 * {
   font-family: Helvetica, Arial, sans-serif;
+  color: darkblue;
 }
 h1 {
   text-align: center;
+  font-size: 3em;
 }
 
 .todostart {
@@ -18,10 +21,12 @@ h1 {
   background: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 #todo-input {
-  width: 40%;
+  width: 30%;
   padding: 10px;
   font-size: 16px;
 }
@@ -34,6 +39,16 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.todo-text {
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .todo-controls {
@@ -144,7 +159,8 @@ h1 {
   cursor: pointer;
 }
 
-button {
+button,
+select {
   border: none;
   border-radius: 6px;
   padding: 8px 14px;
@@ -194,4 +210,25 @@ button:hover {
   gap: 8px;
   justify-content: center;
   margin-top: 6px;
+}
+
+#category-filter {
+  width: 100%;
+  background-color: #00ffb7;
+  color: rgb(0, 0, 0);
+  text-align: center;
+}
+
+#category-three-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+#todo-date-input {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 15px;
 }

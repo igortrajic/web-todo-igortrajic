@@ -1,3 +1,4 @@
+import { categoryFilter } from './documentID'
 import type { ListElement } from './types'
 
 export interface MessageUpdater {
@@ -27,7 +28,14 @@ export function renderTodos({
   todoContainer.innerHTML = ''
   let isOverdue = false
 
-  todos.forEach((todo, id) => {
+  const selectedCategoryText = categoryFilter?.selectedOptions[0]?.textContent
+  const filteredTodos = todos.filter((todo) => {
+    if (selectedCategoryText === 'All Categories') return true
+    const todoCategoryTitle = todo.categories_todos?.[0]?.categories?.title
+    return todoCategoryTitle === selectedCategoryText
+  })
+
+  filteredTodos.forEach((todo, id) => {
     const li = document.createElement('li')
 
     const categoryColor = todo.categories_todos?.[0]?.categories?.color

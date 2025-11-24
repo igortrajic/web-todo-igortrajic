@@ -1,16 +1,24 @@
 import './style.css'
 
-import { addTodo, deleteAllTodo, renderApp } from './codeFiles/actionsTodo'
+import { categoryFilterDropdown } from './codeFiles/categories/filterCategory'
+import {
+  addTodo,
+  deleteAllTodo,
+  renderApp,
+} from './codeFiles/todos/actionsTodo'
 import {
   addButton,
   addCategoryButton,
+  categoryFilter,
   closeCategoryModalButton,
   deleteAllButton,
   errorMessage,
   openCategoryModalButton,
   todoElements,
   todoInput,
-} from './codeFiles/documentID'
+} from './codeFiles/todos/documentID'
+
+categoryFilterDropdown()
 
 if (
   !todoInput ||
@@ -33,3 +41,7 @@ todoInput.addEventListener('keypress', (event) => {
 
 deleteAllButton?.addEventListener('click', deleteAllTodo)
 renderApp()
+
+categoryFilter?.addEventListener('change', () => {
+  renderApp()
+})

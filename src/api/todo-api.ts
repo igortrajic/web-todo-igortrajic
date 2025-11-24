@@ -1,4 +1,4 @@
-import type { ListElement } from '../codeFiles/types'
+import type { ListElement } from '../codeFiles/todos/types'
 
 const API_URL = 'https://api.todos.in.jt-lab.ch/todos'
 
